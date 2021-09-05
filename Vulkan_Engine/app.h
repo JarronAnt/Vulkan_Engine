@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vul_Window.h"
+#include "Vul_Pipeline.h"
 
 
 namespace vul {
@@ -12,6 +13,7 @@ namespace vul {
 		void run();
 	private:
 		VulWindow vulWindow{ WIDTH,HEIGHT, "Vulkan Window" };
+		Vul_Pipeline vulPipeline{ "simple_shader.vert.spv", "simple_shader.frag.spv" };
 	};
 
 }
