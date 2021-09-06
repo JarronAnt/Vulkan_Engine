@@ -1,4 +1,5 @@
 #include "vul_Window.h"
+#include <stdexcept>
 
 
 namespace vul {
@@ -11,6 +12,14 @@ namespace vul {
 	{
 		glfwDestroyWindow(window); 
 		glfwTerminate();
+	}
+
+	void VulWindow::createWindowSurface(VkInstance instance, VkSurfaceKHR* surface)
+	{
+		if (glfwCreateWindowSurface(instance,window,nullptr,surface) != VK_SUCCESS) {
+
+			throw std::runtime_error("error failed to ceate surface");
+		}
 	}
 
 	void vul::VulWindow::initWindow()

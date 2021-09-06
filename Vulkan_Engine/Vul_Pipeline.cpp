@@ -5,19 +5,40 @@
 #include <iostream>
 
 namespace vul {
-	Vul_Pipeline::Vul_Pipeline(const std::string& vertFilePath, const std::string& fragFilePath)
+	Vul_Pipeline::Vul_Pipeline(VulDevice& device, 
+		const std::string& vertFilePath, 
+		const std::string& fragFilePath,
+		const PipelineConfigInfo cfg) : vulDevice(device)
 	{
-		createGraphicsPipeline(vertFilePath, fragFilePath);
+		createGraphicsPipeline(vertFilePath, fragFilePath, cfg);
 	}
 
-	void Vul_Pipeline::createGraphicsPipeline(const std::string& vertFilePath, const std::string& fragFilePath)
+	void Vul_Pipeline::createGraphicsPipeline(const std::string& vertFilePath, const std::string& fragFilePath, const PipelineConfigInfo cfg)
 	{
 		auto vertCode = readFile(vertFilePath);
 		auto fragCode = readFile(fragFilePath);
 
-		std::cout << vertCode.size() << std::endl;
-		std::cout << fragCode.size() << std::endl;
+		
 
+	}
+
+	void Vul_Pipeline::createShaderModule(const std::vector<char>& code, VkShaderModule* module)
+	{
+		VkShaderModuleCreateInfo createInfo{};
+		createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+		createInfo.codeSize = code.size();
+		createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
+
+		if (vkCreateShaderModule ( vulDevice.device(), &createInfo,nullptr,module ) != VK_SUCCESS) {
+			throw std::runtime_error("Failed to create shader module");
+		}
+	}
+
+	PipelineConfigInfo Vul_Pipeline::defaultCfgInfo(uint32_t width, uint32_t height)
+	{
+
+		PipelineConfigInfo cfgInfo{};
+		return cfgInfo;
 	}
 
 	std::vector<char> Vul_Pipeline::readFile(const std::string& filePath)

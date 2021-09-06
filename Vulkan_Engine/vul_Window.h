@@ -15,6 +15,7 @@ namespace vul {
 		VulWindow& operator = (const VulWindow&) = delete;
 
 		bool shouldClose() { return glfwWindowShouldClose(window); }
+		void createWindowSurface(VkInstance instance, VkSurfaceKHR* surface);
 	private:
 		GLFWwindow *window;
 		const int width, height;
