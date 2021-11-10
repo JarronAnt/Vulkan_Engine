@@ -6,6 +6,18 @@
 namespace vul {
 
 	struct PipelineConfigInfo {
+		VkViewport viewport;
+		VkRect2D scissor;
+		VkPipelineViewportStateCreateInfo viewportInfo;
+		VkPipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
+		VkPipelineRasterizationStateCreateInfo rasterizationInfo;
+		VkPipelineMultisampleStateCreateInfo multisampleInfo;
+		VkPipelineColorBlendAttachmentState colorBlendAttachment;
+		VkPipelineColorBlendStateCreateInfo colorBlendInfo;
+		VkPipelineDepthStencilStateCreateInfo depthStencilInfo;
+		VkPipelineLayout pipelineLayout = nullptr;
+		VkRenderPass renderPass = nullptr;
+		uint32_t subpass = 0;
 
 	};
 
@@ -13,7 +25,7 @@ namespace vul {
 	{
 	public:
 		Vul_Pipeline(VulDevice &device, const std::string& vertFilePath, const std::string& fragFilePath, const PipelineConfigInfo cfg);
-		~Vul_Pipeline() {}
+		~Vul_Pipeline();
 
 		Vul_Pipeline(const Vul_Pipeline&) = delete;
 		void operator=(const Vul_Pipeline&) = delete;
@@ -27,7 +39,7 @@ namespace vul {
 		void createShaderModule(const std::vector<char>& code, VkShaderModule* module);
 
 		VulDevice& vulDevice;
-		VkPipeline grpahicsPipeline;
+		VkPipeline graphicsPipeline;
 		VkShaderModule vertShaderModule;
 		VkShaderModule fragShaderModule;
 };
