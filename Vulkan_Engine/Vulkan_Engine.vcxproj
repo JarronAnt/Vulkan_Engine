@@ -157,12 +157,14 @@
   <ItemGroup>
     <ClCompile Include="app.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Vul_SwapChain.cpp" />
     <ClCompile Include="Vul_Device.cpp" />
     <ClCompile Include="Vul_Pipeline.cpp" />
     <ClCompile Include="Vul_Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app.h" />
+    <ClInclude Include="Vul_SwapChain.h" />
     <ClInclude Include="Vul_Device.h" />
     <ClInclude Include="Vul_Pipeline.h" />
     <ClInclude Include="vul_Window.h" />

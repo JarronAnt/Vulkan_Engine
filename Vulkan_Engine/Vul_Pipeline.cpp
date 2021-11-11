@@ -55,13 +55,21 @@ namespace vul {
 		vertexInputInfo.pVertexAttributeDescriptions = nullptr;
 		vertexInputInfo.pVertexBindingDescriptions = nullptr;
 
+		VkPipelineViewportStateCreateInfo viewportInfo{};
+
+		viewportInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+		viewportInfo.viewportCount = 1;
+		viewportInfo.pViewports = &cfg.viewport;
+		viewportInfo.scissorCount = 1;
+		viewportInfo.pScissors = &cfg.scissor;
+
 		VkGraphicsPipelineCreateInfo pipelineInfo{};
 		pipelineInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 		pipelineInfo.stageCount = 2;
 		pipelineInfo.pStages = shaderStages;
 		pipelineInfo.pVertexInputState = &vertexInputInfo;
 		pipelineInfo.pInputAssemblyState = &cfg.inputAssemblyInfo;
-		pipelineInfo.pViewportState = &cfg.viewportInfo;
+		pipelineInfo.pViewportState = &viewportInfo;
 		pipelineInfo.pRasterizationState = &cfg.rasterizationInfo;
 		pipelineInfo.pMultisampleState = &cfg.multisampleInfo;
 		pipelineInfo.pColorBlendState = &cfg.colorBlendInfo;
@@ -121,11 +129,7 @@ namespace vul {
 		cfg.scissor.offset = { 0,0 };
 		cfg.scissor.extent = { width,height};
 
-		cfg.viewportInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-		cfg.viewportInfo.viewportCount = 1;
-		cfg.viewportInfo.pViewports = &cfg.viewport;
-		cfg.viewportInfo.scissorCount = 1;
-		cfg.viewportInfo.pScissors = &cfg.scissor;
+		
 
 		cfg.rasterizationInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
 		cfg.rasterizationInfo.depthClampEnable = VK_FALSE;

@@ -33,11 +33,11 @@
     <ClCompile Include="Vul_Device.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Vul_SwapChain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="vul_Window.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="app.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -45,6 +45,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Vul_Device.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vul_SwapChain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vul_Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
