@@ -8,7 +8,7 @@ namespace vul {
 	Vul_Pipeline::Vul_Pipeline(VulDevice& device, 
 		const std::string& vertFilePath, 
 		const std::string& fragFilePath,
-		const PipelineConfigInfo cfg) : vulDevice(device)
+		const PipelineConfigInfo &cfg) : vulDevice(device)
 	{
 		createGraphicsPipeline(vertFilePath, fragFilePath, cfg);
 	}
@@ -20,7 +20,7 @@ namespace vul {
 
 	}
 
-	void Vul_Pipeline::createGraphicsPipeline(const std::string& vertFilePath, const std::string& fragFilePath, const PipelineConfigInfo cfg)
+	void Vul_Pipeline::createGraphicsPipeline(const std::string& vertFilePath, const std::string& fragFilePath, const PipelineConfigInfo &cfg)
 	{
 		assert(cfg.pipelineLayout != VK_NULL_HANDLE);
 		assert(cfg.renderPass != VK_NULL_HANDLE);
@@ -57,11 +57,11 @@ namespace vul {
 
 		VkPipelineViewportStateCreateInfo viewportInfo{};
 
-		viewportInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+		/*viewportInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
 		viewportInfo.viewportCount = 1;
 		viewportInfo.pViewports = &cfg.viewport;
 		viewportInfo.scissorCount = 1;
-		viewportInfo.pScissors = &cfg.scissor;
+		viewportInfo.pScissors = &cfg.scissor;*/
 
 		VkGraphicsPipelineCreateInfo pipelineInfo{};
 		pipelineInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -69,7 +69,8 @@ namespace vul {
 		pipelineInfo.pStages = shaderStages;
 		pipelineInfo.pVertexInputState = &vertexInputInfo;
 		pipelineInfo.pInputAssemblyState = &cfg.inputAssemblyInfo;
-		pipelineInfo.pViewportState = &viewportInfo;
+		//pipelineInfo.pViewportState = &viewportInfo;
+		pipelineInfo.pViewportState = &cfg.viewportInfo;
 		pipelineInfo.pRasterizationState = &cfg.rasterizationInfo;
 		pipelineInfo.pMultisampleState = &cfg.multisampleInfo;
 		pipelineInfo.pColorBlendState = &cfg.colorBlendInfo;
@@ -111,10 +112,9 @@ namespace vul {
 		}
 	}
 
-	PipelineConfigInfo Vul_Pipeline::defaultCfgInfo(uint32_t width, uint32_t height)
+	void Vul_Pipeline::defaultCfgInfo(PipelineConfigInfo& cfg, uint32_t width, uint32_t height)
 	{
 
-		PipelineConfigInfo cfg{};
 		cfg.inputAssemblyInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
 		cfg.inputAssemblyInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 		cfg.inputAssemblyInfo.primitiveRestartEnable = VK_FALSE;
@@ -128,6 +128,12 @@ namespace vul {
 
 		cfg.scissor.offset = { 0,0 };
 		cfg.scissor.extent = { width,height};
+
+		cfg.viewportInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+		cfg.viewportInfo.viewportCount = 1;
+		cfg.viewportInfo.pViewports = &cfg.viewport;
+		cfg.viewportInfo.scissorCount = 1;
+		cfg.viewportInfo.pScissors = &cfg.scissor;
 
 		
 
@@ -184,8 +190,11 @@ namespace vul {
 		cfg.depthStencilInfo.back = {};   // Optional
 
 
+	}
 
-		return cfg;
+	void Vul_Pipeline::bind(VkCommandBuffer cmdBuffer)
+	{
+		vkCmdBindPipeline(cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
 	}
 
 	std::vector<char> Vul_Pipeline::readFile(const std::string& filePath)
