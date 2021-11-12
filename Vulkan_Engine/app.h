@@ -6,6 +6,7 @@
 #include "Vul_SwapChain.h"
 #include <memory>
 #include <vector>
+#include "Vul_Model.h"
 
 namespace vul {
 	class app
@@ -27,6 +28,8 @@ namespace vul {
 		void createPipeline();
 		void createCmdBuffers();
 		void draw();
+		void sierpinski(std::vector<VulModel::Vertex>& vertices, int depth, glm::vec2 left, glm::vec2 right, glm::vec2 top);
+		void loadModels();
 
 		VulWindow vulWindow{ WIDTH,HEIGHT, "Vulkan Window" };
 		VulDevice vulDevice{ vulWindow };
@@ -34,6 +37,7 @@ namespace vul {
 		std::unique_ptr<Vul_Pipeline> vulPipeline;
 		VkPipelineLayout pipelineLayout;
 		std::vector<VkCommandBuffer> cmdBuffers;
+		std::unique_ptr<VulModel>vulModel;
 
 	};
 

@@ -5,6 +5,7 @@
 namespace vul {
 
 	app::app() {
+		loadModels();
 		createPipelineLayout();
 		createPipeline();
 		createCmdBuffers();
@@ -88,8 +89,8 @@ namespace vul {
 
 			vkCmdBeginRenderPass(cmdBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 			vulPipeline->bind(cmdBuffers[i]);
-			vkCmdDraw(cmdBuffers[i], 3, 1, 0, 0);
-
+			vulModel->bind(cmdBuffers[i]);
+			vulModel->draw(cmdBuffers[i]);
 			vkCmdEndRenderPass(cmdBuffers[i]);
 			if (vkEndCommandBuffer(cmdBuffers[i]) != VK_SUCCESS) {
 				throw std::runtime_error("failed to record command buffer");
@@ -108,5 +109,32 @@ namespace vul {
 		if (result != VK_SUCCESS) {
 			throw std::runtime_error("failed to present swap chain image!");
 		}
+	}
+
+	void app::sierpinski(
+		std::vector<VulModel::Vertex>& vertices,
+		int depth,
+		glm::vec2 left,
+		glm::vec2 right,
+		glm::vec2 top) {
+		if (depth <= 0) {
+			vertices.push_back({ top });
+			vertices.push_back({ right });
+			vertices.push_back({ left });
+		}
+		else {
+			auto leftTop = 0.5f * (left + top);
+			auto rightTop = 0.5f * (right + top);
+			auto leftRight = 0.5f * (left + right);
+			sierpinski(vertices, depth - 1, left, leftRight, leftTop);
+			sierpinski(vertices, depth - 1, leftRight, right, rightTop);
+			sierpinski(vertices, depth - 1, leftTop, rightTop, top);
+		}
+	}
+	void app::loadModels()
+	{
+		std::vector<VulModel::Vertex> verts{};
+		sierpinski(verts, 5, { -0.5f, 0.5f }, { 0.5f, 0.5f }, { 0.0f, -0.5f });
+		vulModel = std::make_unique<VulModel>(vulDevice, verts);
 	}
 }
