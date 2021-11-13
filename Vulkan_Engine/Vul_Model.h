@@ -14,6 +14,7 @@ namespace vul {
 
 		struct Vertex {
 			glm::vec2 pos;
+			glm::vec3 col;
 			static std::vector<VkVertexInputBindingDescription> getBindingDescriptions();
 			static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions(); 
 		};

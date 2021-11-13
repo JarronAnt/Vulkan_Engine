@@ -133,8 +133,11 @@ namespace vul {
 	}
 	void app::loadModels()
 	{
-		std::vector<VulModel::Vertex> verts{};
-		sierpinski(verts, 5, { -0.5f, 0.5f }, { 0.5f, 0.5f }, { 0.0f, -0.5f });
+		std::vector<VulModel::Vertex> verts{ 
+			{{0.0f,-0.5f},{1.0f,0.0f,0.0f}},
+			{{0.5f,0.5f},{0.0f,1.0f,0.0f}},
+			{{-0.5f,0.5f},{0.0f,0.0f,1.0f}} };
+		//sierpinski(verts, 5, { -0.5f, 0.5f }, { 0.5f, 0.5f }, { 0.0f, -0.5f });
 		vulModel = std::make_unique<VulModel>(vulDevice, verts);
 	}
 }
