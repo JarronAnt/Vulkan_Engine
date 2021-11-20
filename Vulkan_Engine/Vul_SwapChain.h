@@ -6,6 +6,7 @@
 // std lib headers
 #include <string>
 #include <vector>
+#include <memory>
 
 namespace vul {
 	class SwapChain
@@ -14,6 +15,8 @@ namespace vul {
 		static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
 
 		SwapChain(VulDevice& deviceRef, VkExtent2D windowExtent);
+		SwapChain(VulDevice& deviceRef, VkExtent2D windowExtent,std::shared_ptr<SwapChain>prev);
+
 		~SwapChain();
 
 		SwapChain(const SwapChain&) = delete;
@@ -42,6 +45,9 @@ namespace vul {
 		void createRenderPass();
 		void createFramebuffers();
 		void createSyncObjects();
+		void init();
+
+		std::shared_ptr<SwapChain>oldSwap;
 
 		// Helper functions
 		VkSurfaceFormatKHR chooseSwapSurfaceFormat(

@@ -10,14 +10,15 @@
 
 namespace vul {
 
-    SwapChain::SwapChain(VulDevice& deviceRef, VkExtent2D extent)
-        : device{ deviceRef }, windowExtent{ extent } {
-        createSwapChain();
-        createImageViews();
-        createRenderPass();
-        createDepthResources();
-        createFramebuffers();
-        createSyncObjects();
+    SwapChain::SwapChain(VulDevice& deviceRef, VkExtent2D extent): device{ deviceRef }, windowExtent{ extent } {
+        init();
+    }
+
+    SwapChain::SwapChain(VulDevice& deviceRef, VkExtent2D extent, std::shared_ptr<SwapChain>prev) : device{ deviceRef }, windowExtent{ extent },
+        oldSwap{ prev } {
+        init();
+
+        oldSwap = nullptr;
     }
 
     SwapChain::~SwapChain() {
@@ -162,7 +163,7 @@ namespace vul {
         createInfo.presentMode = presentMode;
         createInfo.clipped = VK_TRUE;
 
-        createInfo.oldSwapchain = VK_NULL_HANDLE;
+        createInfo.oldSwapchain = oldSwap == nullptr ? VK_NULL_HANDLE : oldSwap->swapChain;
 
         if (vkCreateSwapchainKHR(device.device(), &createInfo, nullptr, &swapChain) != VK_SUCCESS) {
             throw std::runtime_error("failed to create swap chain!");
@@ -357,6 +358,16 @@ namespace vul {
                 throw std::runtime_error("failed to create synchronization objects for a frame!");
             }
         }
+    }
+
+    void SwapChain::init()
+    {
+        createSwapChain();
+        createImageViews();
+        createRenderPass();
+        createDepthResources();
+        createFramebuffers();
+        createSyncObjects();
     }
 
     VkSurfaceFormatKHR SwapChain::chooseSwapSurfaceFormat(

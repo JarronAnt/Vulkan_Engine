@@ -29,6 +29,7 @@ namespace vul {
 		void createPipelineLayout();
 		void createPipeline();
 		void createCmdBuffers();
+		void freeCmdBuffers();
 		void draw();
 		void sierpinski(std::vector<VulModel::Vertex>& vertices, int depth, glm::vec2 left, glm::vec2 right, glm::vec2 top);
 		void loadModels();

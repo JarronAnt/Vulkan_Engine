@@ -56,9 +56,18 @@ namespace vul {
 			glfwWaitEvents();
 		}
 		vkDeviceWaitIdle(vulDevice.device());
-		vulSwapChain = nullptr;
-		vulSwapChain = std::make_unique<SwapChain>(vulDevice, extent);
-		printf("swapchain made");
+		//vulSwapChain = nullptr;
+
+		if (vulSwapChain == nullptr) {
+			vulSwapChain = std::make_unique<SwapChain>(vulDevice, extent);
+		}
+		else {
+			vulSwapChain = std::make_unique<SwapChain>(vulDevice, extent,std::move(vulSwapChain));
+			if (vulSwapChain->imageCount() != cmdBuffers.size()) {
+				freeCmdBuffers();
+				createCmdBuffers();
+			}
+		}
 		createPipeline();
 	}
 
@@ -74,6 +83,12 @@ namespace vul {
 		if (vkAllocateCommandBuffers(vulDevice.device(), &allocInfo, cmdBuffers.data()) != VK_SUCCESS) {
 			throw std::runtime_error("Could not create command buffer");
 		}
+	}
+
+	void app::freeCmdBuffers()
+	{
+		vkFreeCommandBuffers(vulDevice.device(), vulDevice.getCommandPool(), static_cast<uint32_t>(cmdBuffers.size()),cmdBuffers.data());
+		cmdBuffers.clear();
 	}
 
 	void app::recordCmdBuffer(int imageIndex) {
