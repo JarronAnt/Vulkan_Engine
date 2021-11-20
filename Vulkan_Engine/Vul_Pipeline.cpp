@@ -79,7 +79,7 @@ namespace vul {
 		pipelineInfo.pRasterizationState = &cfg.rasterizationInfo;
 		pipelineInfo.pMultisampleState = &cfg.multisampleInfo;
 		pipelineInfo.pColorBlendState = &cfg.colorBlendInfo;
-		pipelineInfo.pDynamicState = nullptr;  // Optional
+		pipelineInfo.pDynamicState = &cfg.dynamicStateInfo;  // Optional
 		pipelineInfo.pDepthStencilState = &cfg.depthStencilInfo;
 
 		pipelineInfo.layout = cfg.pipelineLayout;
@@ -117,14 +117,14 @@ namespace vul {
 		}
 	}
 
-	void Vul_Pipeline::defaultCfgInfo(PipelineConfigInfo& cfg, uint32_t width, uint32_t height)
+	void Vul_Pipeline::defaultCfgInfo(PipelineConfigInfo& cfg)
 	{
 
 		cfg.inputAssemblyInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
 		cfg.inputAssemblyInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 		cfg.inputAssemblyInfo.primitiveRestartEnable = VK_FALSE;
 
-		cfg.viewport.x = 0.0f;
+		/*cfg.viewport.x = 0.0f;
 		cfg.viewport.y = 0.0f;
 		cfg.viewport.width = static_cast<float>(width);
 		cfg.viewport.height = static_cast<float>(height);
@@ -132,13 +132,13 @@ namespace vul {
 		cfg.viewport.maxDepth = 1.0f;
 
 		cfg.scissor.offset = { 0,0 };
-		cfg.scissor.extent = { width,height};
+		cfg.scissor.extent = { width,height};*/
 
 		cfg.viewportInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
 		cfg.viewportInfo.viewportCount = 1;
-		cfg.viewportInfo.pViewports = &cfg.viewport;
+		cfg.viewportInfo.pViewports = nullptr;
 		cfg.viewportInfo.scissorCount = 1;
-		cfg.viewportInfo.pScissors = &cfg.scissor;
+		cfg.viewportInfo.pScissors = nullptr;
 
 		
 
@@ -194,7 +194,11 @@ namespace vul {
 		cfg.depthStencilInfo.front = {};  // Optional
 		cfg.depthStencilInfo.back = {};   // Optional
 
-
+		cfg.dynamicStateEnables = { VK_DYNAMIC_STATE_VIEWPORT,VK_DYNAMIC_STATE_SCISSOR };
+		cfg.dynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+		cfg.dynamicStateInfo.pDynamicStates = cfg.dynamicStateEnables.data();
+		cfg.dynamicStateInfo.dynamicStateCount = static_cast<uint32_t>(cfg.dynamicStateEnables.size());
+		cfg.dynamicStateInfo.flags = 0; 
 	}
 
 	void Vul_Pipeline::bind(VkCommandBuffer cmdBuffer)

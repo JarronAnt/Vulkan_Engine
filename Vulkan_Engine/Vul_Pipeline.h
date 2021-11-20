@@ -10,8 +10,9 @@ namespace vul {
 		PipelineConfigInfo& operator=(const PipelineConfigInfo&) = delete;
 		PipelineConfigInfo() = default;
 
-		VkViewport viewport;
-		VkRect2D scissor;
+		//VkViewport viewport;
+		//VkRect2D scissor;
+
 		VkPipelineViewportStateCreateInfo viewportInfo;
 		VkPipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
 		VkPipelineRasterizationStateCreateInfo rasterizationInfo;
@@ -21,6 +22,8 @@ namespace vul {
 		VkPipelineDepthStencilStateCreateInfo depthStencilInfo;
 		VkPipelineLayout pipelineLayout = nullptr;
 		VkRenderPass renderPass = nullptr;
+		std::vector<VkDynamicState>dynamicStateEnables;
+		VkPipelineDynamicStateCreateInfo dynamicStateInfo;
 		uint32_t subpass = 0;
 	};
 
@@ -35,7 +38,7 @@ namespace vul {
 		Vul_Pipeline& operator=(const Vul_Pipeline&) = delete;
 		Vul_Pipeline() = default;
 
-		static void defaultCfgInfo(PipelineConfigInfo& cfg, uint32_t width, uint32_t height);
+		static void defaultCfgInfo(PipelineConfigInfo& cfg);
 
 		void bind(VkCommandBuffer cmdBuffer);
 

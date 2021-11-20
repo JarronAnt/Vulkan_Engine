@@ -39,9 +39,7 @@ namespace vul {
 	{
 		PipelineConfigInfo pipelineConfig{};
 		Vul_Pipeline::defaultCfgInfo(
-			pipelineConfig,
-			vulSwapChain->width(),
-			vulSwapChain->height());
+			pipelineConfig);
 		pipelineConfig.renderPass = vulSwapChain->getRenderPass();
 		pipelineConfig.pipelineLayout = pipelineLayout;
 		vulPipeline = std::make_unique<Vul_Pipeline>(
@@ -102,6 +100,20 @@ namespace vul {
 		renderPassInfo.pClearValues = clearValues.data();
 
 		vkCmdBeginRenderPass(cmdBuffers[imageIndex], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+		VkViewport viewport{};
+		viewport.x = 0.0f;
+		viewport.y = 0.0f;
+		viewport.width = static_cast<float>(vulSwapChain->getSwapChainExtent().width);
+		viewport.height = static_cast<float>(vulSwapChain->getSwapChainExtent().height);
+		viewport.minDepth = 0.0f;
+		viewport.maxDepth = 1.0f;
+		VkRect2D scissor{ {0,0},vulSwapChain->getSwapChainExtent() };
+		vkCmdSetViewport(cmdBuffers[imageIndex], 0, 1, &viewport);
+		vkCmdSetScissor(cmdBuffers[imageIndex], 0, 1, &scissor);
+
+
+
 		vulPipeline->bind(cmdBuffers[imageIndex]);
 		vulModel->bind(cmdBuffers[imageIndex]);
 		vulModel->draw(cmdBuffers[imageIndex]);
