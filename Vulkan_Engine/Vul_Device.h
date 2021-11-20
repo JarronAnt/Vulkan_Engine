@@ -32,7 +32,7 @@ namespace vul {
 
 		// Not copyable or movable
 		VulDevice(const VulDevice&) = delete;
-		void operator=(const VulDevice&) = delete;
+		VulDevice& operator=(const VulDevice&) = delete;
 		VulDevice(VulDevice&&) = delete;
 		VulDevice& operator=(VulDevice&&) = delete;
 

@@ -24,6 +24,8 @@ namespace vul {
 		app& operator=(const app&) = delete;
 
 	private:
+		void recreateSwapchain();
+		void recordCmdBuffer(int imageIndex);
 		void createPipelineLayout();
 		void createPipeline();
 		void createCmdBuffers();
@@ -33,7 +35,7 @@ namespace vul {
 
 		VulWindow vulWindow{ WIDTH,HEIGHT, "Vulkan Window" };
 		VulDevice vulDevice{ vulWindow };
-		SwapChain vulSwapChain{ vulDevice,vulWindow.getExtent() };
+		std::unique_ptr<SwapChain> vulSwapChain;
 		std::unique_ptr<Vul_Pipeline> vulPipeline;
 		VkPipelineLayout pipelineLayout;
 		std::vector<VkCommandBuffer> cmdBuffers;

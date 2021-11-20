@@ -32,7 +32,8 @@ namespace vul {
 		~Vul_Pipeline();
 
 		Vul_Pipeline(const Vul_Pipeline&) = delete;
-		void operator=(const Vul_Pipeline&) = delete;
+		Vul_Pipeline& operator=(const Vul_Pipeline&) = delete;
+		Vul_Pipeline() = default;
 
 		static void defaultCfgInfo(PipelineConfigInfo& cfg, uint32_t width, uint32_t height);
 

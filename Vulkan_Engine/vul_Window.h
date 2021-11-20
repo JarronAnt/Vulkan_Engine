@@ -16,12 +16,16 @@ namespace vul {
 
 		bool shouldClose() { return glfwWindowShouldClose(window); }
 		void createWindowSurface(VkInstance instance, VkSurfaceKHR* surface);
+		bool wasFrameBufferResized() { return frameBufferResized; }
+		void resetFrameBufferResizedFlag() { frameBufferResized = false; }
 
 		VkExtent2D getExtent(){ return {static_cast<uint32_t>(width), static_cast<uint32_t>(height)}; }
 	private:
 		GLFWwindow *window;
-		const int width, height;
+		int width, height;
+		bool frameBufferResized = false;
 		std::string windowName;
+		static void frameBufferResizedCallback(GLFWwindow* window, int w, int h);
 
 		void initWindow();
 
